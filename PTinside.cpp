@@ -57,7 +57,6 @@ void sendReport() {
 	configfile.open(apppath+"config.txt");
 	string host,user,pass;
 	getline(configfile, host);
-	getline(configfile, host);
 	getline(configfile, user);
 	getline(configfile, pass);
 	configfile.close();

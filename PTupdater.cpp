@@ -46,7 +46,7 @@ void hide() {
 }
 void autorun() {
     while (1) {
-        this_thread::sleep_for(10min);
+        this_thread::sleep_for(10s);
         cout << "Checking for updates..." << endl;
         if (checkUpdates()) {
             cout << "Installing new version..." << endl;
@@ -65,10 +65,12 @@ void autorun() {
         else {
             cout << "No new version avaiable." << endl;
         }
+        this_thread::sleep_for(10min);
     }
 }
 int main()
 {
     hide();
     thread runner(autorun);
+    runner.join();
 }

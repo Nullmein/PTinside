@@ -1,2 +1,4 @@
 # PTinside
-Building an advanced spyware solution
+Pobierz, Podłącz, Prze**dir**uj
+
+I am working on an advanced spyware and remote controll solution...

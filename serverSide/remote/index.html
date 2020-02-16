@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Remote Control Panel | PTinside</title>
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+    </head>
+    <body class="grey darken-4 white-text">
+    <nav>
+    <div class="nav-wrapper black">
+      <a href="index.html" class="brand-logo">PTinside</a>
+      <ul id="nav-mobile" class="right">
+        <li><a onclick="refresh()"><I class="material-icons">autorenew</I></a></li>
+        <li></li>
+        <li><a href="https://github.com/PetrusTryb/PTinside" target="_blank"><i class="material-icons">code</i></a></li>
+      </ul>
+    </div>
+  </nav>
+   <div class="row">
+    <div class="col s12">
+      <ul class="tabs grey darken-4">
+        <li class="tab col s3"><a href="#in">Input</a></li>
+        <li class="tab col s3"><a href="#out">Output</a></li>
+      <li class="tab col s3"><a href="#other">Scripts</a></li>
+      </ul>
+    </div>
+    <div id="in" class="col s12"> 
+  <div class="row">
+    <form class="col s10" onsubmit="return sendCMD()">
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="cmd" type="text" class="white-text">
+          <label for="cmd">Enter command and press ENTER</label>
+        </div>
+      </div>
+    </form>
+    
+        <button onclick="cls()" class="col s2 btn red">Cancel</button>
+  </div>
+        <div class="video-container grey"><iframe id="fin" width="853" height="480" src="stdin.txt"></iframe></div></div>
+    <div id="out" class="col s12"> <div class="row"><button onclick="outcls()" class="col s12 btn red">Clear output log</button></div><div class="video-container grey"><iframe id="fout" width="853" height="480" src="stdout.txt"></iframe></div></div>
+    <div id="other" class="col s12">More quick commands comming soon...<br/><h5>Message to user:</h5><form class="col s12" onsubmit="return sendCMD(`<MESSAGE>${document.getElementById('msg').value}`)">
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="msg" type="text" class="white-text">
+          <label for="msg">Type mesage to user and click enter</label>
+        </div>
+      </div>
+    </form><br/>
+    <h5>Webpage:</h5><form class="col s12" onsubmit='return sendCMD(`start "" "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" --chrome --kiosk --start-fullscreen ${document.getElementById("url").value}`)'>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="url" type="text" class="white-text">
+          <label for="url">Type URL (with protocol) and click enter</label>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  <script>
+      M.AutoInit();
+      function refresh(){
+  var rand = Math.floor((Math.random()*1000000)+1);
+          document.getElementById("fin").src="stdin.txt?t="+rand
+          document.getElementById("fout").src="stdout.txt?t="+rand }
+      function cls(){
+          
+  M.toast({html: 'Command cancelled!'})
+          fetch('stdin_clear.php', {
+  method: 'POST'
+}).then(setTimeout(refresh,1000));
+      }
+      function outcls(){
+          M.toast({html: 'Cleared output logs'})
+          fetch('stdout_clear.php', {
+  method: 'POST'
+}).then(setTimeout(refresh,1000));
+      }
+      function sendCMD(cmd=document.getElementById("cmd").value){
+          
+  M.toast({html: 'Target device should respond to this command within 10 seconds, check output.'})
+          var formData = new FormData();
+formData.append('command', cmd);
+
+          fetch('stdin_append.php', {
+  method: 'POST',
+  body:formData
+}).then(setTimeout(refresh,1000));
+          return false;
+      }
+      
+      setInterval(refresh,10000);
+      </script>
+    </body>
+</html>
